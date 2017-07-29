@@ -10,3 +10,21 @@ ol, ul { list-style: none; }
 blockquote, q { quotes: none; }
 blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
 table { border-collapse: collapse; border-spacing: 0; }
+
+section p {
+    margin-bottom: 20px;
+}
+
+.right-img, .left-img {
+    margin-bottom: 10px;
+}
+
+.right-img {
+    float: right;
+    margin-left: 10px;
+}
+
+.left-img {
+    float: left;
+    margin-right: 10px;
+}
