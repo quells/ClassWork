@@ -28,3 +28,15 @@ section p {
     float: left;
     margin-right: 10px;
 }
+
+.a {
+    background: red;
+    width: 30%; height: 300px;
+    float: left;
+}
+
+.b {
+    background: blue;
+    width: 70%; height: 300px;
+    float: right;
+}
