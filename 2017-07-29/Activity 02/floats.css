@@ -16,18 +16,17 @@ body {
 
 header {
     padding: 20px;
-    margin-bottom: 20px;
     color: #333;
     background: #ccc;
 }
 
 section {
     padding: 20px 0;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 #left, #middle, #right {
-    width: 33%;
+    width: 33.33%;
     float: left;
     color: white;
 }
@@ -42,18 +41,13 @@ section {
 
 #right {
     background-color: #666;
-    width: 34%;
 }
 
 #full {
     background-color: #eee;
     padding: 20px 0;
     margin-top: 100px;
-}
-
-#full::after {
-    content: "";
-    display: block;
+    overflow: auto;
     clear: both;
 }
 
@@ -74,4 +68,5 @@ aside {
 footer {
     padding: 20px 0;
     background-color: #ccc;
+    margin-top: 20px;
 }
