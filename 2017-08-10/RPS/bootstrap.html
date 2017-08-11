@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<style media="screen">
+			h1 {
+				font-size: 4em;
+			}
+
+			@media (max-width: 767px) {
+				h2 {
+					font-size: 24px;
+				}
+			}
+		</style>
+		<title>RPS+</title>
+	</head>
+	<body>
+		<div class="container">
+			<br>
+			<nav class="nav navbar-default">
+				<div class="container-fluid">
+					<div class="nav navbar-header">
+						<span class="navbar-brand">RPS+</span>
+					</div>
+					<div class="nav navbar-right" style="padding-right: 10px;">
+						<button type="button" class="btn btn-default navbar-btn" onclick="resetGame();">New Game</button>
+						<button type="button" class="btn btn-default navbar-btn" onclick="showHowToPlay();">How To Play</button>
+					</div>
+				</div>
+			</nav>
+			<br>
+			<div id="howToPlay" class="alert alert-info" role="alert">
+				<strong>Welcome!</strong> Let&rsquo;s play RPSLS. For those who don&rsquo;t know, here are the rules:
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeHowToPlay();"><span aria-hidden="true">&times;</span></button>
+				<br><br>
+
+				<table class="table" style="font-size:1.5em;">
+					<tr>
+						<th>Player \ Computer</th>
+						<th>&#x270A;</th><!-- Rock -->
+						<th>&#x1F4DD;</th><!-- Paper -->
+						<th>&#x2702;</th><!-- Scissors -->
+						<th>&#x1F98E;</th><!-- Lizard -->
+						<th>&#x1F596;</th><!-- Spock -->
+					</tr>
+					<tr> <!-- D L W W L -->
+						<th>&#x270A;</th><!-- Rock -->
+						<td>&#x1F610;</td><!-- Draw -->
+						<td>&#x2620;</td><!-- Lose -->
+						<td>&#x1F389;</td><!-- Win -->
+						<td>&#x1F389;</td><!-- Win -->
+						<td>&#x2620;</td><!-- Lose -->
+					</tr>
+					<tr> <!-- W D L L W -->
+						<th>&#x1F4DD;</th><!-- Paper -->
+						<td>&#x1F389;</td><!-- Win -->
+						<td>&#x1F610;</td><!-- Draw -->
+						<td>&#x2620;</td><!-- Lose -->
+						<td>&#x2620;</td><!-- Lose -->
+						<td>&#x1F389;</td><!-- Win -->
+					</tr>
+					<tr> <!-- L W D W L -->
+						<th>&#x2702;</th><!-- Scissors -->
+						<td>&#x2620;</td><!-- Lose -->
+						<td>&#x1F389;</td><!-- Win -->
+						<td>&#x1F610;</td><!-- Draw -->
+						<td>&#x1F389;</td><!-- Win -->
+						<td>&#x2620;</td><!-- Lose -->
+					</tr>
+					<tr> <!-- L W L D W -->
+						<th>&#x1F98E;</th><!-- Lizard -->
+						<td>&#x2620;</td><!-- Lose -->
+						<td>&#x1F389;</td><!-- Win -->
+						<td>&#x2620;</td><!-- Lose -->
+						<td>&#x1F610;</td><!-- Draw -->
+						<td>&#x1F389;</td><!-- Win -->
+					</tr>
+					<tr> <!-- W L W L D -->
+						<th>&#x1F596;</th><!-- Spock -->
+						<td>&#x1F389;</td><!-- Win -->
+						<td>&#x2620;</td><!-- Lose -->
+						<td>&#x1F389;</td><!-- Win -->
+						<td>&#x2620;</td><!-- Lose -->
+						<td>&#x1F610;</td><!-- Draw -->
+					</tr>
+				</table>
+			</div>
+
+			<div class="jumbotron">
+				<div class="row">
+					<div class="col-sm-6 col-xs-6">
+						<h2>Player Score</h2>
+					</div>
+					<div class="col-sm-4 col-xs-4 text-center">
+						<h2 id="playerWins">0</h2>
+					</div>
+					<div class="col-sm-2 col-xs-2 text-right">
+						<h2 id="playerWinPerc">0%</h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 col-xs-6">
+						<h2>Computer Score</h2>
+					</div>
+					<div class="col-sm-4 col-xs-4 text-center">
+						<h2 id="computerWins">0</h2>
+					</div>
+					<div class="col-sm-2 col-xs-2 text-right">
+						<h2 id="computerWinPerc">0%</h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 col-xs-6">
+						<h2>Draws</h2>
+					</div>
+					<div class="col-sm-4 col-xs-4 text-center">
+						<h2 id="draws">0</h2>
+					</div>
+				</div>
+			</div>
+
+			<div class="jumbotron">
+				<div class="row">
+					<div id="playerMoveBox" class="col-xs-6 text-center">
+						<h3>Player Choice</h3>
+						<h1 id="playerMove"></h1>
+					</div>
+					<div id="computerMoveBox" class="col-xs-6 text-center">
+						<h3>Computer Choice</h3>
+						<h1 id="computerMove"></h1>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-1"></div>
+				<button type="button" class="btn btn-default col-xs-2" onclick="playerChose(0);updateUI();">&#x270A;</button>
+				<button type="button" class="btn btn-default col-xs-2" onclick="playerChose(1);updateUI();">&#x1F4DD;</button>
+				<button type="button" class="btn btn-default col-xs-2" onclick="playerChose(2);updateUI();">&#x2702;</button>
+				<button type="button" class="btn btn-default col-xs-2" onclick="playerChose(3);updateUI();">&#x1F98E;</button>
+				<button type="button" class="btn btn-default col-xs-2" onclick="playerChose(4);updateUI();">&#x1F596;</button>
+			</div>
+			<br><br>
+		</div>
+
+<script type="text/javascript">
+
+function showHowToPlay() {
+	document.getElementById("howToPlay").style.display = "block";
+}
+
+function closeHowToPlay() {
+	document.getElementById("howToPlay").style.display = "none";
+}
+
+closeHowToPlay(); // TODO: Remove
+
+var computerWins = 0;
+var playerWins = 0;
+var numGames = 0;
+
+var winMap = [
+	[0, -1, 1, 1, -1],
+	[1, 0, -1, -1, 1],
+	[-1, 1, 0, 1, -1],
+	[-1, 1, -1, 0, 1],
+	[1, -1, 1, -1, 0]
+];
+
+// var moveMap = ["rock", "paper", "scissors", "lizard", "Spock"];
+var moveMap = ["&#x270A;", "&#x1F4DD;", "&#x2702;", "&#x1F98E;", "&#x1F596;"];
+
+function percentage(a, b) {
+	var p = 100.0 * a / b;
+	return parseInt(p);
+}
+
+function updateUI() {
+	document.getElementById("computerWins").innerHTML = computerWins;
+	document.getElementById("playerWins").innerHTML = playerWins;
+	document.getElementById("draws").innerHTML = numGames - playerWins - computerWins;
+
+	if (numGames > 0) {
+		document.getElementById("computerWinPerc").innerHTML = percentage(computerWins, numGames) + "%";
+		document.getElementById("playerWinPerc").innerHTML = percentage(playerWins, numGames) + "%";
+	} else {
+		document.getElementById("computerWinPerc").innerHTML = "";
+		document.getElementById("playerWinPerc").innerHTML = "";
+	}
+}
+
+function resetMoves() {
+	document.getElementById("playerMove").innerHTML = "";
+	document.getElementById("computerMove").innerHTML = "";
+	document.getElementById("playerMoveBox").classList.remove("bg-success");
+	document.getElementById("playerMoveBox").classList.remove("bg-danger");
+	document.getElementById("computerMoveBox").classList.remove("bg-success");
+	document.getElementById("computerMoveBox").classList.remove("bg-danger");
+}
+
+function resetGame() {
+	computerWins = 0;
+	playerWins = 0;
+	numGames = 0;
+
+	updateUI();
+	resetMoves();
+}
+
+function randomChoice() {
+	return parseInt(Math.random() * moveMap.length);
+}
+
+function playerChose(playerChoice) {
+	numGames++;
+
+	// 0 = rock
+	// 1 = paper
+	// 2 = scissors
+	var computerChoice = randomChoice();
+	var winner = winMap[playerChoice][computerChoice];
+
+	// Update UI
+	resetMoves();
+	document.getElementById("computerMove").innerHTML = moveMap[computerChoice];
+	document.getElementById("playerMove").innerHTML = moveMap[playerChoice];
+
+	// -1 = player lost
+	//  0 = draw
+	//  1 = player won
+	switch (winner) {
+		case -1:
+			document.getElementById("computerMoveBox").classList.add("bg-success");
+			document.getElementById("playerMoveBox").classList.add("bg-danger");
+			computerWins++;
+			break;
+		case 0:
+			break;
+		case 1:
+			document.getElementById("computerMoveBox").classList.add("bg-danger");
+			document.getElementById("playerMoveBox").classList.add("bg-success");
+			playerWins++;
+			break;
+		default:
+			console.log("Invalid state. playerChoice = " + playerChoice + ", computerChoice = " + computerChoice);
+			break;
+	}
+}
+
+// document.addEventListener("keyup", function(e) {
+// 	switch (e.key) {
+// 		case "r":
+// 			playerChose(0);
+// 			break;
+// 		case "p":
+// 			playerChose(1);
+// 			break;
+// 		case "s":
+// 			playerChose(2);
+// 			break;
+// 		case "l":
+// 			playerChose(3);
+// 			break;
+// 		case "y":
+// 			playerChose(4);
+// 			break;
+// 		case "n":
+// 			resetGame();
+// 		default:
+// 			break;
+// 	}
+//
+// 	updateUI();
+// });
+
+</script>
+	</body>
+</html>
