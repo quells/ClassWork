@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<title>Drive</title>
+	<style media="screen">
+		th { text-align: right; padding-right: 5px; }
+		td { text-align: left; }
+	</style>
+</head>
+<body>
+
+<h1>Drive</h1>
+<table>
+	<tr>
+		<th>Make</th>
+		<td id="make"></td>
+	</tr>
+	<tr>
+		<th>Model</th>
+		<td id="model"></td>
+	</tr>
+	<tr>
+		<th>Color</th>
+		<td id="color"></td>
+	</tr>
+	<tr>
+		<th>Mileage</th>
+		<td id="mileage"></td>
+	</tr>
+	<tr>
+		<th>Working Status</th>
+		<td id="isWorking"></td>
+	</tr>
+</table>
+
+<h2>Controls</h2>
+<p>Press a key to:</p>
+<ul>
+	<li>w: drive to work</li>
+	<li>a: drive around the world</li>
+	<li>t: tune up the car</li>
+	<li>h: honk the horn</li>
+	<li>c: change color of car</li>
+</ul>
+
+<script>
+var car = {
+	make: "Honda",
+	model: "Fit",
+	color: "Blue Raspberry",
+	mileage: 3000,
+	isWorking: true,
+
+	driveToWork: function() {
+		// alert("Old Mileage: " + this.mileage);
+		if (this.isWorking) {
+			this.mileage = this.mileage + 8;
+		} else {
+			alert("Car needs a tuneup!");
+		}
+		// alert("New mileage: " + this.mileage);
+	},
+
+	driveAroundWorld: function() {
+		// alert("Old Mileage: " + this.mileage);
+		if (this.isWorking) {
+			this.mileage = this.mileage + 24000;
+			this.isWorking = false;
+		} else {
+			alert("Car needs a tuneup!");
+		}
+		// alert("New Mileage: " + this.mileage);
+		// alert("Car needs a tuneup!");
+	},
+
+	getTuneUp: function() {
+		alert("Car is ready to go!");
+		this.isWorking = true;
+	},
+
+	honk: function() {
+		alert("Honk! Honk!");
+	}
+};
+
+function updateUI() {
+	document.getElementById("make").innerHTML = car["make"];
+	document.getElementById("model").innerHTML = car["model"];
+	document.getElementById("color").innerHTML = car["color"];
+	document.getElementById("mileage").innerHTML = car["mileage"];
+	document.getElementById("isWorking").innerHTML = car["isWorking"] ? "OK" : "Broken";
+};
+
+updateUI();
+
+document.addEventListener("keyup", function(e) {
+	switch (e.key) {
+		case "w":
+			car.driveToWork();
+			break;
+		case "a":
+			car.driveAroundWorld();
+			break;
+		case "t":
+			car.getTuneUp();
+			break;
+		case "h":
+			car.honk();
+			break;
+		case "c":
+			var newColor = prompt("What color should the car be?");
+			car.color = newColor;
+			break;
+		default:
+			break;
+	}
+	updateUI();
+});
+
+</script>
+
+</body>
+</html>
