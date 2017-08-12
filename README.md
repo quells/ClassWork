@@ -2,6 +2,10 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## August 12, 2017
+
+- [Car example](https://quells.github.io/ClassWork/2017-08-12/car.html)
+
 ## August 10, 2017
 
 - Javascript control structions
