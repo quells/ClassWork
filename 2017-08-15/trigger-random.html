@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trigger Random</title>
+
+  <!-- Added link to the jQuery Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Added a link to Bootstrap-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+</head>
+<body>
+
+  <div class="jumbotron">
+
+	<h1 class="text-center">Generate a Random Number!</h1>
+
+	<div class="text-center">
+
+	  <!-- Here we have our button for generating random numbers (#random-button) -->
+	  <button id="random-button" class="btn btn-primary btn-lg"><h1><span class="glyphicon glyphicon-question-sign"></span></h1></button>
+
+	</div>
+
+  </div>
+
+  <!-- Here we have div called "random-number" where our random number will go -->
+  <h1 class="text-center" id="random-number"></h1>
+  <h1 class="text-center" id="average"></h1>
+  <h1 class="text-center" id="stddev"></h1>
+
+  <script type="text/javascript">
+
+var samples = new Array();
+
+function updateUI() {
+	if (samples.length < 1) { return; }
+	var sum = 0;
+	samples.forEach(function(s) {
+		sum += s;
+	});
+	var average = sum / samples.length;
+	$("#average").text("Average: " + average.toFixed(2));
+
+	var stdDev = 0;
+	samples.forEach(function(s) {
+		var delta = s - average;
+		stdDev += delta*delta;
+	});
+	stdDev = Math.sqrt(stdDev / samples.length);
+	$("#stddev").text("Standard Deviation: " + stdDev.toFixed(2));
+}
+
+	$(document).ready(function() {
+
+	  // CREATE THE MISSING CODE HERE. Your code should add content to the random-number div.
+	  // ...
+
+
+		$("#random-button").on("click", function() {
+			var sample = Math.ceil(Math.random()*1000);
+			$("#random-number").text(sample);
+			samples.push(sample);
+			updateUI();
+		});
+
+	  // ...
+
+	});
+
+  </script>
+
+</body>
+</html>
