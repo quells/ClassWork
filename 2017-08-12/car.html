@@ -95,6 +95,7 @@ function updateUI() {
 updateUI();
 
 document.addEventListener("keyup", function(e) {
+	console.log(e);
 	switch (e.key) {
 		case "w":
 			car.driveToWork();

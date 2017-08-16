@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Object Property Order</title>
+	</head>
+	<body>
+<script type="text/javascript">
+
+var testObject = {
+	"abc": 123,
+	"xyz": "toy boat",
+	"nested": {
+		"hello": "world"
+	}
+}
+
+for (var key in testObject) {
+	var value = testObject[key];
+	console.log(key + " : " + value);
+}
+
+</script>
+	</body>
+</html>

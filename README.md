@@ -2,6 +2,10 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## August 15, 2017
+
+- Intro to jQuery
+
 ## August 12, 2017
 
 - [Car example](https://quells.github.io/ClassWork/2017-08-12/car.html)
