@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Trigger Clicked</title>
+
+  <!-- Added link to the jQuery Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+  <h1>Click to Eat Sandwich</h1>
+  <h3 id="pbj">Peanut Butter Jelly</h3>
+  <h3 id="grilledcheese">Grilled Cheese</h3>
+  <h3 id="roastbeef">Roast Beef</h3>
+  <img id="image" />
+
+  <script type="text/javascript">
+
+	// This document.ready isn't necessary in this example... but is needed in cases where the HTML is complex.
+	// This code makes sure that the JavaScript doesn't get run until the HTML is finished loading
+	// It's useful to become familiar with now.
+
+	$(document).ready(function() {
+
+	  // VARIABLES
+	  // ====================================================================
+	  // Here we create variables for tracking the number of sandwiches eaten
+	  // ...
+
+		var sandwichesEaten = {
+			pbj: 0,
+			grilledCheese: 0,
+			roastBeef: 0
+		};
+
+	  // ...
+
+	  // FUNCTIONS
+	  // ====================================================================
+	  // Here we create various on "click" functions which capture the clicks
+	  // Inside each click event is the code to create an alert, update the counter, then show the updated count.
+	  // ...
+
+		$("#pbj").on("click", function() {
+			sandwichesEaten.pbj++;
+			$("#image").attr("src", "http://img1.wikia.nocookie.net/__cb20141129150614/epicrapbattlesofhistory/images/c/c2/Peanut-butter-jelly-time.gif");
+			alert("The school yard classic.");
+			alert("You've eaten " + sandwichesEaten.pbj + " PB&J sandwiches.");
+		});
+
+		$("#grilledcheese").on("click", function() {
+			sandwichesEaten.grilledCheese++;
+			$("#image").attr("src", "https://cdn.firstwefeast.com/assets/2014/06/apst.gif");
+			alert("I need some tomato soup...");
+			alert("You've eaten " + sandwichesEaten.grilledCheese + " grilled cheese sandwiches.");
+		});
+
+		$("#roastbeef").on("click", function() {
+			sandwichesEaten.roastBeef++;
+			$("#image").attr("src", "https://media.tenor.com/images/2611e34e6f4e9f5c4576f050a45e910f/tenor.gif");
+			alert("The best leftovers.");
+			alert("You've eaten " + sandwichesEaten.roastBeef + " roast beef sandwiches.");
+		});
+
+	  // ...
+
+	});
+
+</script>
+</body>
+</html>
