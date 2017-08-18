@@ -34,6 +34,7 @@
     height: 500px;
     width: 220px;
     margin-left: 60px;
+    overflow-y: hidden;
   }
 
   #buttons {
@@ -89,6 +90,9 @@
         document.onkeyup = function(e) {
             if (65 <= e.keyCode && e.keyCode <= 90) {
                 addChar(String.fromCharCode(e.keyCode));
+            }
+            if (e.keyCode == 32) {
+                addChar("");
             }
         }
 
