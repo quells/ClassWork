@@ -2,6 +2,10 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## August 17, 2017
+
+- More jQuery (Games!)
+
 ## August 15, 2017
 
 - Intro to jQuery
