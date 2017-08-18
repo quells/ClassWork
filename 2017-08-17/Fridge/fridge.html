@@ -77,11 +77,12 @@
         for (var c = 65; c <= 90; c++) {
             var char = String.fromCharCode(c);
             var letterBtn = $("<button>").addClass("letter-button letter letter-button-color").attr("data-letter", char).text(char);
-            letterBtn.on("click", function() {
-                addChar($(this).attr("data-letter"));
-            });
             $("#buttons").append(letterBtn);
         }
+
+        $(".letter-button").on("click", function() {
+            addChar($(this).attr("data-letter"));
+        })
 
         $("#clear").on("click", function() {
             $("#display").empty();
