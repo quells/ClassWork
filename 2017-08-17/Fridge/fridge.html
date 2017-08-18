@@ -60,13 +60,37 @@
 
       // Here we are provided an initial array of letters.
       // Use this array to dynamically create buttons on the screen.
-      var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "_"];
+    //   var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "_"];
 
 
       // MAJOR TASK #1: DYNAMICALLY CREATE BUTTONS
       // =================================================================================
 
       // 1. Create a for-loop to iterate through the letters array.
+
+        function addChar(char) {
+            var fridgeMagnet = $("<div>").addClass("letter fridge-color").text(char);
+            $("#display").append(fridgeMagnet);
+        }
+
+        for (var c = 65; c <= 90; c++) {
+            var char = String.fromCharCode(c);
+            var letterBtn = $("<button>").addClass("letter-button letter letter-button-color").attr("data-letter", char).text(char);
+            letterBtn.on("click", function() {
+                addChar($(this).attr("data-letter"));
+            });
+            $("#buttons").append(letterBtn);
+        }
+
+        $("#clear").on("click", function() {
+            $("#display").empty();
+        });
+
+        document.onkeyup = function(e) {
+            if (65 <= e.keyCode && e.keyCode <= 90) {
+                addChar(String.fromCharCode(e.keyCode));
+            }
+        }
 
       // Inside the loop...
 
