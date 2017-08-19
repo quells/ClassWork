@@ -93,25 +93,44 @@ factor: integer
 integer: digit digit*
 */
 
-var token = function(char, kind) {
+var Token = function(char, kind) {
     this.char = char;
     this.kind = kind;
 }
 
-function parseInput() {
+function parse(input) {
+    var tokens = new Array();
     for (var i = 0; i < input.length; i++) {
         var char = input.charAt(i);
-        console.log(char);
+        var kind = "UNKNOWN";
+        var charCode = char.charCodeAt(0);
+        var opKinds = ["TIMES", "PLUS", "UNKNOWN", "MINUS", "UNKNOWN", "DIV"];
+        // 0: 48, 9: 57
+        if (48 <= charCode && charCode <= 57) {
+            kind = "DIGIT";
+        } else if (charCode == 40) {
+            kind = "LPAREN";
+        } else if (charCode == 41) {
+            kind = "RPAREN";
+        } else {
+            // 42
+            // * + ? - ?  /
+            charCode -= 42;
+            kind = opKinds[charCode];
+        }
+        tokens.push(new Token(char, kind));
     }
+    return tokens;
 }
 
-function interpretInput() {
+function interpret(tokens) {
 
 }
 
 function updateUI() {
     // update result
-
+    var tokens = parse(input);
+    var result = interpret(tokens);
     // display result
     $("#input").text(input);
     $("#result").text(result);
