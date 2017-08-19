@@ -91,11 +91,95 @@ term: factor ((times/div) factor)*
 factor: integer
       | lparen expr rparen
 integer: digit digit*
+
+NOTE: technically the result will be a float like all numbers in JS
 */
+
+// Use `undefined` for nil ie optional value
 
 var Token = function(char, kind) {
     this.char = char;
     this.kind = kind;
+}
+
+var Integer = function(digits) {
+    this.number = parseInt(digits);
+    this.value = function() {
+        return this.number;
+    }
+}
+
+var Factor = function(expr) {
+    this.expr = expr;
+    this.value = function() {
+        return this.expr.value();
+    }
+}
+
+var Term = function(lhs, op, rhs) {
+    this.lhs = lhs;
+    this.op = op;
+    this.rhs = rhs;
+    this.value = function() {
+        if (this.lhs === undefined) {
+            if (this.rhs === undefined) {
+                throw "Both operands of this term are undefined"
+            } else {
+                return this.rhs.value();
+            }
+        } else {
+            if (this.rhs === undefined) {
+                return this.lhs.value();
+            } else {
+                var l = this.lhs.value();
+                var r = this.rhs.value();
+                switch (this.op.kind) {
+                    case "TIMES":
+                        return l * r;
+                        break;
+                    case "DIV":
+                        return l / r;
+                        break;
+                    default:
+                        throw "Invalid operand in term: " + this.op;
+                        break;
+                }
+            }
+        }
+    }
+}
+
+var Expr = function(lhs, op, rhs) {
+    this.lhs = lhs;
+    this.op = op;
+    this.rhs = rhs;
+    this.value = function() {
+        if (this.lhs === undefined) {
+            if (this.rhs === undefined) {
+                throw "Both operands of this expr are undefined"
+            } else {
+                return this.rhs.value();
+            }
+        } else {
+            if (this.rhs === undefined) {
+                return this.lhs.value();
+            } else {
+                var l = this.lhs.value();
+                var r = this.rhs.value();
+                switch (this.op.kind) {
+                    case "PLUS":
+                        return l + r;
+                        break;
+                    case "MINUS":
+                        return l - r;
+                        break;
+                    default:
+                        throw "Invalid operand in expr: " + this.op;
+                        break;
+                }
+            }
+        }
+    }
 }
 
 function parse(input) {
