@@ -12,8 +12,12 @@
             width: 23%;
         }
 
-        #button-clear {
-            width: auto;
+        #button-clear, #button-backspace {
+            width: 48%;
+        }
+
+        .error {
+            color: red;
         }
     </style>
 </head>
@@ -55,6 +59,7 @@
                     <button id="button-divide" class="btn btn-danger operator" value="/"><h1>&divide;</h1></button>
                     <br><br>
                     <button id="button-clear" class="btn btn-default clear" value="clear"><h1>clear</h1></button>
+                    <button id="button-backspace" class="btn btn-default clear" value="backspace"><h1><span class="glyphicon glyphicon-arrow-left"></span></h1></button>
                 </div>
             </div>
         </div>
@@ -174,6 +179,7 @@ var Expr = function(lhs, op, rhs) {
                         return l - r;
                         break;
                     default:
+                        console.log(this.op);
                         throw "Invalid operand in expr: " + this.op;
                         break;
                 }
@@ -204,17 +210,141 @@ function parse(input) {
         }
         tokens.push(new Token(char, kind));
     }
+    tokens.push(new Token("", "EOF"));
     return tokens;
 }
 
-function interpret(tokens) {
+var Interpreter = function(tokens) {
+    if (tokens.length < 1) {
+        throw "Empty token list";
+    }
+    this.tokens = tokens;
+    this.currentToken = tokens[0];
+    this.currentIndex = 0;
+    this.tree = null;
 
+    this.eat = function(kind) {
+        if (this.currentToken.kind == kind) {
+            var result = this.currentToken;
+            this.currentIndex++;
+            this.currentToken = this.tokens[this.currentIndex];
+            return result;
+        } else {
+            throw "Expected " + kind + ", found " + this.currentToken.kind;
+        }
+    }
+
+    this.handleInteger = function() {
+        var digits = "";
+        while (this.currentToken.kind == "DIGIT") {
+            var digit = this.eat("DIGIT");
+            digits += digit.char;
+        }
+        if (digits.length < 1) {
+            throw "No integer found";
+        }
+        return new Integer(digits);
+    }
+
+    this.handleFactor = function() {
+        if (this.currentToken.kind == "DIGIT") {
+            return this.handleInteger();
+        } else if (this.currentToken.kind == "LPAREN") {
+            this.eat("LPAREN");
+            var e;
+            try {
+                e = this.handleExpr();
+            } catch (err) {
+                throw "No factor found: " + err;
+            }
+            this.eat("RPAREN");
+            return e;
+        } else {
+            throw "Expected factor, found: " + this.currentToken.kind;
+        }
+    }
+
+    this.handleTerm = function() {
+        var lhs;
+        var rhs;
+        var op;
+        try {
+            lhs = this.handleFactor();
+            // console.log(this.currentToken)
+            if (this.currentToken.kind == "TIMES" || this.currentToken.kind == "DIV") {
+                op = this.currentToken;
+                this.eat(op.kind);
+                // console.log("op: " + op);
+                rhs = this.handleFactor();
+                // console.log("rhs: " + rhs);
+                return new Term(lhs, op, rhs);
+            }
+            return lhs;
+        } catch (err) {
+            throw "No term found: " + err;
+        }
+    }
+
+    this.handleExpr = function() {
+        var lhs;
+        var rhs;
+        var op;
+        try {
+            lhs = this.handleTerm();
+            if (this.currentToken.kind == "PLUS" || this.currentToken.kind == "MINUS") {
+                op = this.currentToken;
+                this.eat(op.kind);
+                // console.log("op: " + op);
+                rhs = this.handleTerm();
+                // console.log("rhs: " + rhs);
+                return new Expr(lhs, op, rhs);
+            }
+            return lhs;
+        } catch (err) {
+            throw "No expr found: " + err;
+        }
+    }
+
+    this.evaluate = function() {
+        this.tree = this.handleExpr();
+        while (this.currentToken.kind != "EOF") {
+            if (this.currentToken.kind == "PLUS" || this.currentToken.kind == "MINUS") {
+                var lhs = this.tree;
+                var op = this.currentToken;
+                this.eat(op.kind);
+                var rhs = this.handleExpr();
+                this.tree = new Expr(lhs, op, rhs);
+            } else if (this.currentToken.kind == "TIMES" || this.currentToken.kind == "DIV") {
+                var lhs = this.tree;
+                var op = this.currentToken;
+                this.eat(op.kind);
+                var rhs = this.handleExpr();
+                this.tree = new Term(lhs, op, rhs);
+            } else {
+                throw "What? " + this.currentToken.kind;
+            }
+        }
+    }
 }
 
 function updateUI() {
+    $("#input").removeClass("error");
+    // $(".error").remove();
     // update result
     var tokens = parse(input);
-    var result = interpret(tokens);
+    var interpreter = new Interpreter(tokens);
+    var result;
+    try {
+        interpreter.evaluate();
+        result = interpreter.tree.value();
+        // $("#input").text(input);
+    } catch (err) {
+        $("#input").addClass("error");
+        console.log(err);
+        // TODO: remove next line
+        // $("<div>").addClass("alert alert-danger error").text(err).appendTo($(".container"));
+        result = "...";
+    }
     // display result
     $("#input").text(input);
     $("#result").text(result);
@@ -237,6 +367,11 @@ $(document).ready(function(){
         input = "";
         updateUI();
     });
+
+    $("#button-backspace").on("click", function() {
+        input = input.slice(0, input.length-1);
+        updateUI();
+    })
 
     updateUI();
 });
