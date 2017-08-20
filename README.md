@@ -2,6 +2,11 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## August 19, 2017
+
+- [jQuery Calculator](https://quells.github.io/ClassWork/2017-08-19/calculator.html)
+- Including parser/lexer + interpreter for scientific calculator functionality
+
 ## August 17, 2017
 
 - More jQuery (Games!)
