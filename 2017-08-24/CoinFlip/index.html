@@ -2,14 +2,10 @@
 <!DOCTYPE html>
 
 <html lang="en-us">
-
   <head>
-
     <meta charset="UTF-8">
     <title>Coin Flipper</title>
-
   </head>
-
   <body>
 
     <!-- The html is done for us. -->
@@ -71,10 +67,17 @@
       //  STEP ONE:
 
         //  Declare and initialize a variable named randomNumber to either 0 or 1. Make it random.
+        var randomNumber = Math.floor(Math.random()*2);
+        console.log(randomNumber);
 
       //  STEP TWO:
 
         //  If randomNumber is equal to zero then:
+        if (randomNumber == 0) {
+            $("#coin-image").html($("<img>").attr("src", "http://random-ize.com/coin-flip/us-quarter/us-quarter-front.jpg"))
+        } else {
+            $("#coin-image").html($("<img>").attr("src", "http://random-ize.com/coin-flip/us-quarter/us-quarter-back.jpg"))
+        }
 
           //  Find the div with an id of coin-image.
           //  Replace its html with an img tag containing this image:
@@ -89,6 +92,18 @@
       //  STEP THREE:
 
         // If result is equal to randomNumber, do the following:
+        $("#win-lose").empty();
+        var winLoseText = "";
+        if (result == randomNumber) {
+            wins++;
+            winLoseText = "Winner!";
+            $("#wins").text(wins);
+        } else {
+            losses++;
+            winLoseText = "Loser!";
+            $("#losses").text(losses);
+        }
+        $("<h2>").text(winLoseText).appendTo($("#win-lose"));
 
           //  Increment wins by one.
           //  Find the div with an id of win-lose. Update it with an h2 of "Winner!"
@@ -113,6 +128,10 @@
     $("#tails").on("click", function() {
 
       //  STEP FOUR:
+      tailsCount++;
+      $("tails-chosen").html(tailsCount);
+      $("#guess").html("<b>Tails</b>");
+      flipThatCoin(1);
 
           //  Increment tailsCount by one.
           //  Find the span with an id of tails-chosen. Replace the html inside of the span with the tailsCount.
@@ -122,7 +141,5 @@
     });
 
     </script>
-
   </body>
-
 </html>
