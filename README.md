@@ -2,6 +2,10 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## August 24, 2017
+
+- [Coin Flipper](https://quells.github.io/ClassWork/2017-08-24/CoinFlip/index.html)
+
 ## August 19, 2017
 
 - [jQuery Calculator](https://quells.github.io/ClassWork/2017-08-19/calculator.html)
