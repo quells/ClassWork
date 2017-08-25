@@ -8,48 +8,43 @@
     <title>Coin Flipper</title>
   </head>
   <body>
+    <div class="container">
+        <br>
+        <h1>Flip A Coin!</h1>
+        <br>
 
-    <!-- The html is done for us. -->
-    <h1>Flip A Coin!</h1>
-    <h2>Guess Heads or Tails:</h2>
+        <h2>
+            Guess Heads or Tails:
+            <button id="heads" class="btn btn-primary">Heads</button>
+            <button id="tails" class="btn btn-primary">Tails</button>
+        </h2>
 
-    <button id="heads">Heads</button>
-    <button id="tails">Tails</button>
+        <hr>
 
-    <br>
+        <div class="row" style="min-height:200px;">
+            <div class="col-6">
+                <h3> You guessed: <span id="guess"></span></h3>
+                <br>
+                <br>
+                <div id="win-lose" class="text-center"></div>
+            </div>
+            <div class="col-6 text-center">
+                <div id="coin-image"></div>
+            </div>
+        </div>
 
-    <div> You guessed:
-      <span id="guess"></span>
-    </div>
+        <hr>
 
-    <br>
-
-    <div id="coin-image"></div>
-
-    <div id="win-lose"></div>
-
-    <div id="win-loss-tracker">
-
-      <div>
-        <h3>Wins: </h3>
-        <span id="wins"></span>
-      </div>
-
-      <div>
-        <h3>Losses: </h3>
-        <span id="losses"></span>
-      </div>
-
-      <div>
-        <h3>Heads chosen: </h3>
-        <span id="heads-chosen"></span>
-      </div>
-
-      <div>
-        <h3>Tails chosen: </h3>
-        <span id="tails-chosen"></span>
-      </div>
-
+        <div class="row">
+            <div class="col-6 text-center">
+                <h3>Wins: <span id="wins"></span></h3>
+                <h3>Losses: <span id="losses"></span></h3>
+            </div>
+            <div class="col-6 text-center">
+                <h3>Heads chosen: <span id="heads-chosen"></span></h3>
+                <h3>Tails chosen: <span id="tails-chosen"></span></h3>
+            </div>
+        </div>
     </div>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -58,7 +53,6 @@
   // This on click function has been completed for us.
   $("#heads").on("click", function() {
     headsCount++;
-    $("#heads-chosen").html(headsCount);
     $("#guess").html("<b>Heads</b>");
     flipThatCoin(0);
   });
@@ -67,7 +61,6 @@
 
     //  STEP FOUR:
     tailsCount++;
-    $("tails-chosen").html(tailsCount);
     $("#guess").html("<b>Tails</b>");
     flipThatCoin(1);
 

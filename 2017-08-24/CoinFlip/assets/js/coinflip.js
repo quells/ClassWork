@@ -12,7 +12,6 @@
 
         //  Declare and initialize a variable named randomNumber to either 0 or 1. Make it random.
         var randomNumber = Math.floor(Math.random()*2);
-        console.log(randomNumber);
 
       //  STEP TWO:
 
@@ -41,13 +40,15 @@
         if (result == randomNumber) {
             wins++;
             winLoseText = "Winner!";
-            $("#wins").text(wins);
         } else {
             losses++;
             winLoseText = "Loser!";
-            $("#losses").text(losses);
         }
         $("<h2>").text(winLoseText).appendTo($("#win-lose"));
+        $("#wins").text(wins);
+        $("#losses").text(losses);
+        $("#heads-chosen").html(headsCount);
+        $("#tails-chosen").html(tailsCount);
 
           //  Increment wins by one.
           //  Find the div with an id of win-lose. Update it with an h2 of "Winner!"
