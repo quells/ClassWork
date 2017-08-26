@@ -2,6 +2,11 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## August 26, 2017
+
+- Whiteboarding & Interview questions
+- [Sorting](https://quells.github.io/ClassWork/2017-08-26/filenames.html)
+
 ## August 24, 2017
 
 - [Coin Flipper](https://quells.github.io/ClassWork/2017-08-24/CoinFlip/index.html)
