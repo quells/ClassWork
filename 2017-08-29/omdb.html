@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <title>OMDB API Demo</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="mt-3 mb-3">Open Movie Database API Access</h1>
+            <div class="row mb-3">
+                <div class="input-group col-12">
+                    <span class="input-group-addon">API Key</span>
+                    <input type="text" class="form-control" id="apikeyInput">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">Title</span>
+                        <input type="text" class="form-control" id="titleInput">
+                    </div>
+                </div>
+                <div class="col-8 col-md-4 text-md-center">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-media-type" mediatype="movie">Movie</button>
+                        <button type="button" class="btn btn-media-type" mediatype="series">Series</button>
+                        <button type="button" class="btn btn-media-type" mediatype="episode">Episode</button>
+                    </div>
+                </div>
+                <div class="col-4 col-md-2 text-right">
+                    <button type="button" class="btn btn-success" id="submit">Submit</button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-3 mb-md-0" id="resultsText"></div>
+                <div class="col-12 col-md-6 text-center text-md-right" id="resultsImage"></div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="omdb.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            var mediaType = "";
+
+            $(document).ready(function() {
+                // Media type button group
+                $(".btn-media-type").click(function() {
+                    $(".btn-media-type").each(function() {
+                        $(this).removeClass("btn-primary");
+                    });
+
+                    if (mediaType === $(this).attr("mediatype")) {
+                        mediaType = "";
+                        return;
+                    }
+
+                    mediaType = $(this).attr("mediatype");
+                    $(this).addClass("btn-primary");
+                });
+
+                // Submit button
+                $("#submit").click(function() {
+                    var apikey = $("#apikeyInput").val();
+                    var title = $("#titleInput").val();
+                    if (title.length < 1) { return; }
+
+                    var apiRequest = new OMDB(apikey).title(title);
+                    if (mediaType !== "") {
+                        switch (mediaType) {
+                            case "movie":
+                                apiRequest = apiRequest.onlyMovies();
+                                break;
+                            case "series":
+                                apiRequest = apiRequest.onlySeries();
+                                break;
+                            case "episode":
+                                apiRequest = apiRequest.onlyEpisode();
+                                break;
+                            default:
+                                throw "Invalid media type";
+                        }
+                    }
+
+                    apiRequest.get(function(json) {
+                        console.log(json)
+                        var results = $("#resultsText");
+                        results.empty();
+                        $("#resultsImage").empty();
+
+                        // If bad response
+                        if (json.Response === "False") {
+                            var failureMsg = "'" + title + "' Not Found in ";
+                            switch (mediaType) {
+                                case "":
+                                    failureMsg += "All Results";
+                                    break;
+                                case "movie":
+                                    failureMsg += "Movies";
+                                    break;
+                                case "series":
+                                    failureMsg += "Series";
+                                    break;
+                                case "episode":
+                                    failureMsg += "Episodes";
+                                    break;
+                                default:
+                                    throw "Invalid media type";
+                            }
+                            $("<h2>").text(failureMsg).appendTo(results);
+                            return;
+                        }
+
+                        $("<h2>").text(json.Title + " (" + json.Year + ")").appendTo(results);
+                        $("<p>").text(json.Plot).appendTo(results);
+
+                        if (json.Poster !== "N/A") {
+                            $("<img>").attr("src", json.Poster).appendTo($("#resultsImage"));
+                        }
+                    });
+                })
+            });
+        </script>
+    </body>
+</html>

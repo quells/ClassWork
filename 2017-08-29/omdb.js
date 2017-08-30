@@ -1,0 +1,62 @@
+var OMDB = function(apikey) {
+    this.url = "http://www.omdbapi.com/?apikey=" + apikey;
+
+    this.withID = function(i) {
+        this.url += "&i=" + i;
+        for (p in this) {
+            if (p !== "url" && p !== "get" && p !== "withFullPlot") {
+                delete this[p];
+            }
+        }
+        return this;
+    }
+
+    this.get = function(callback) {
+        $.getJSON(this.url, function(json) {
+            callback(json);
+        });
+    };
+
+    this.title = function(t) {
+        t = t.split(" ").join("+");
+        this.url += "&t=" + t;
+        delete this.title;
+        return this;
+    };
+
+    this.year = function(y) {
+        this.url += "&y=" + y;
+        delete this.year;
+        return this;
+    };
+
+    this.onlyMovies = function() {
+        this.url += "&type=movie";
+        delete this.onlyMovies;
+        delete this.onlySeries;
+        delete this.onlyEpisode;
+        return this;
+    };
+
+    this.onlySeries = function() {
+        this.url += "&type=series";
+        delete this.onlyMovies;
+        delete this.onlySeries;
+        delete this.onlyEpisode;
+        return this;
+    };
+
+    this.onlyEpisode = function() {
+        this.url += "&type=episode";
+        delete this.onlyMovies;
+        delete this.onlySeries;
+        delete this.onlyEpisode;
+        return this;
+    };
+
+    this.withFullPlot = function() {
+        this.url += "&plot=full";
+        delete this.withFullPlot;
+        return this;
+    }
+}

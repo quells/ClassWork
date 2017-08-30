@@ -2,6 +2,10 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## August 30, 2017
+
+- Intro to APIs & AJAX
+
 ## August 26, 2017
 
 - Whiteboarding & Interview questions
