@@ -2,7 +2,11 @@
 
 UCSD Extension Full Stack Web Development 0725
 
-## August 30, 2017
+## August 31, 2017
+
+- More APIs
+
+## August 29, 2017
 
 - Intro to APIs & AJAX
 
