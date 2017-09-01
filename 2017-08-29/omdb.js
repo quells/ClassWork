@@ -1,5 +1,5 @@
 var OMDB = function(apikey) {
-    this.url = "http://www.omdbapi.com/?apikey=" + apikey;
+    this.url = "https://www.omdbapi.com/?apikey=" + apikey;
 
     this.withID = function(i) {
         this.url += "&i=" + i;
