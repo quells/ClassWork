@@ -18,10 +18,19 @@ var OMDB = function(apikey) {
         }).done(callback);
     };
 
+    this.search = function(s) {
+        s = s.split(" ").join("+");
+        this.url += "&s=" + s;
+        delete this.search;
+        delete this.title;
+        return this;
+    }
+
     this.title = function(t) {
         t = t.split(" ").join("+");
         this.url += "&t=" + t;
         delete this.title;
+        delete this.search;
         return this;
     };
 
