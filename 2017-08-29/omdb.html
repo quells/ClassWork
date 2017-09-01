@@ -4,6 +4,11 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <title>OMDB API Demo</title>
+        <style media="screen">
+            #resultsRaw {
+                overflow-x: scroll;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
@@ -36,6 +41,11 @@
             <div class="row">
                 <div class="col-12 col-md-6 mb-3 mb-md-0" id="resultsText"></div>
                 <div class="col-12 col-md-6 text-center text-md-right" id="resultsImage"></div>
+                <div class="col-12">
+                    <hr>
+                    <h4>Raw Results</h4>
+                    <div id="resultsRaw"></div>
+                </div>
             </div>
         </div>
 
@@ -60,8 +70,17 @@
                     $(this).addClass("btn-primary");
                 });
 
+                $(document).keypress(function(e) {
+                    // On hit enter
+                    if (e.which === 13) {
+                        runRequest();
+                    }
+                })
+
                 // Submit button
-                $("#submit").click(function() {
+                $("#submit").click(runRequest);
+
+                function runRequest() {
                     var apikey = $("#apikeyInput").val();
                     var title = $("#titleInput").val();
                     if (title.length < 1) { return; }
@@ -84,7 +103,7 @@
                     }
 
                     apiRequest.get(function(json) {
-                        console.log(json)
+                        $("#resultsRaw").text(JSON.stringify(json));
                         var results = $("#resultsText");
                         results.empty();
                         $("#resultsImage").empty();
@@ -113,13 +132,26 @@
                         }
 
                         $("<h2>").text(json.Title + " (" + json.Year + ")").appendTo(results);
+                        results.append($("<br>"));
+                        $("<h4>").text("Directed by " + json.Director).appendTo(results);
+                        $("<h4>").text("Written by " + json.Writer).appendTo(results);
+                        results.append($("<br>"));
+                        $("<p>").text("Actors: " + json.Actors).appendTo(results);
                         $("<p>").text(json.Plot).appendTo(results);
+                        $("<p>").text(json.Runtime).appendTo(results);
+                        $("<h4>").text("Ratings").appendTo(results);
+                        var ratings = $("<ul>");
+                        for (var i = 0; i < json.Ratings.length; i++) {
+                            var r = json.Ratings[i];
+                            $("<li>").text(r.Source + ": " + r.Value).appendTo(ratings);
+                        }
+                        ratings.appendTo(results);
 
                         if (json.Poster !== "N/A") {
                             $("<img>").attr("src", json.Poster).appendTo($("#resultsImage"));
                         }
                     });
-                })
+                };
             });
         </script>
     </body>
