@@ -12,9 +12,10 @@ var OMDB = function(apikey) {
     }
 
     this.get = function(callback) {
-        $.getJSON(this.url, function(json) {
-            callback(json);
-        });
+        $.ajax({
+            url: this.url,
+            method: "GET"
+        }).done(callback);
     };
 
     this.title = function(t) {
