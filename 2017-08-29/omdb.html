@@ -5,6 +5,15 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <title>OMDB API Demo</title>
         <style media="screen">
+            .clear { clear: both; }
+
+            .resultBox {
+                float: left;
+                width: 332px;
+                height: 550px;
+                padding: 16px;
+            }
+
             #resultsRaw {
                 overflow-x: scroll;
             }
@@ -22,7 +31,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 mb-3 mb-md-0">
                     <div class="input-group">
-                        <span class="input-group-addon">Title</span>
+                        <span class="input-group-addon">Search</span>
                         <input type="text" class="form-control" id="titleInput">
                     </div>
                 </div>
@@ -37,12 +46,20 @@
                     <button type="button" class="btn btn-success" id="submit">Submit</button>
                 </div>
             </div>
+
             <hr>
-            <div class="row">
+
+            <div id="allResults"></div>
+
+            <!-- <div class="row">
                 <div class="col-12 col-md-6 mb-3 mb-md-0" id="resultsText"></div>
                 <div class="col-12 col-md-6 text-center text-md-right" id="resultsImage"></div>
+            </div> -->
+
+            <hr>
+
+            <div class="row">
                 <div class="col-12">
-                    <hr>
                     <h4>Raw Results</h4>
                     <div id="resultsRaw"></div>
                 </div>
@@ -53,6 +70,7 @@
         <script src="omdb.js" charset="utf-8"></script>
         <script type="text/javascript">
             var mediaType = "";
+            var apikey = "";
 
             $(document).ready(function() {
                 // Media type button group
@@ -81,11 +99,11 @@
                 $("#submit").click(runRequest);
 
                 function runRequest() {
-                    var apikey = $("#apikeyInput").val();
+                    apikey = $("#apikeyInput").val();
                     var title = $("#titleInput").val();
                     if (title.length < 1) { return; }
 
-                    var apiRequest = new OMDB(apikey).title(title);
+                    var apiRequest = new OMDB(apikey).search(title);
                     if (mediaType !== "") {
                         switch (mediaType) {
                             case "movie":
@@ -104,9 +122,8 @@
 
                     apiRequest.get(function(json) {
                         $("#resultsRaw").text(JSON.stringify(json));
-                        var results = $("#resultsText");
-                        results.empty();
-                        $("#resultsImage").empty();
+                        var allResults = $("#allResults");
+                        allResults.empty();
 
                         // If bad response
                         if (json.Response === "False") {
@@ -127,31 +144,69 @@
                                 default:
                                     throw "Invalid media type";
                             }
-                            $("<h2>").text(failureMsg).appendTo(results);
+                            $("<h2>").text(failureMsg).appendTo(allResults);
                             return;
                         }
 
-                        $("<h2>").text(json.Title + " (" + json.Year + ")").appendTo(results);
-                        results.append($("<br>"));
-                        $("<h4>").text("Directed by " + json.Director).appendTo(results);
-                        $("<h4>").text("Written by " + json.Writer).appendTo(results);
-                        results.append($("<br>"));
-                        $("<p>").text("Actors: " + json.Actors).appendTo(results);
-                        $("<p>").text(json.Plot).appendTo(results);
-                        $("<p>").text(json.Runtime).appendTo(results);
-                        $("<h4>").text("Ratings").appendTo(results);
-                        var ratings = $("<ul>");
-                        for (var i = 0; i < json.Ratings.length; i++) {
-                            var r = json.Ratings[i];
-                            $("<li>").text(r.Source + ": " + r.Value).appendTo(ratings);
+                        var results = json.Search;
+                        for (var i = 0; i < results.length; i++) {
+                            buildResult(results[i]);
                         }
-                        ratings.appendTo(results);
 
-                        if (json.Poster !== "N/A") {
-                            $("<img>").attr("src", json.Poster).appendTo($("#resultsImage"));
-                        }
+                        $("#allResults").append($("<div>").addClass("clear"));
                     });
                 };
+
+                function buildResult(json) {
+                    var result = $("<div>").addClass("resultBox");
+
+                    $("<h3>").text(json.Title + " (" + json.Year + ")").appendTo(result);
+
+                    if (json.Poster !== "N/A") {
+                        $("<img>").attr("src", json.Poster).appendTo(result);
+                    }
+
+                    result.click(function() {
+                        var singleRequest = new OMDB(apikey).withID(json.imdbID);
+                        singleRequest.get(function(json) {
+                            $("#resultsRaw").text(JSON.stringify(json));
+                            var allResults = $("#allResults");
+                            allResults.empty();
+                            buildSingleResult(json);
+                        })
+                    });
+
+                    $("#allResults").append(result);
+                };
+
+                function buildSingleResult(json) {
+                    var result = $("<div>").addClass("row");
+                    var resultText = $("<div>").addClass("col-12 col-md-6 mb-3 mb-md-0").appendTo(result);
+                    var resultPoster = $("<div>").addClass("col-12 col-md-6 text-center text-md-right").appendTo(result);
+
+                    $("<h3>").text(json.Title + " (" + json.Year + ")").appendTo(resultText);
+                    resultText.append($("<br>"));
+                    $("<h4>").text("Directed by " + json.Director).appendTo(resultText);
+                    $("<h4>").text("Written by " + json.Writer).appendTo(resultText);
+                    resultText.append($("<br>"));
+                    $("<p>").text("Actors: " + json.Actors).appendTo(resultText);
+                    $("<p>").text(json.Plot).appendTo(resultText);
+                    $("<p>").text(json.Runtime).appendTo(resultText);
+                    $("<h4>").text("Ratings").appendTo(resultText);
+                    var ratings = $("<ul>");
+                    $("<li>").text("MPAA: " + json.Rated).appendTo(ratings);
+                    for (var i = 0; i < json.Ratings.length; i++) {
+                        var r = json.Ratings[i];
+                        $("<li>").text(r.Source + ": " + r.Value).appendTo(ratings);
+                    }
+                    ratings.appendTo(resultText);
+
+                    if (json.Poster !== "N/A") {
+                        $("<img>").attr("src", json.Poster).appendTo(resultPoster);
+                    }
+
+                    $("#allResults").append(result)
+                }
             });
         </script>
     </body>
