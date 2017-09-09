@@ -5,7 +5,8 @@
         <title>Firebase Demo</title>
     </head>
     <body>
-        <button type="button" id="incrementBtn">Click Me!</button>
+        <button type="button" id="changeBtn">Click Me!</button>
+        <button type="button" id="resetBtn">Reset</button>
         <p id="clicksCounted"></p>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
@@ -23,14 +24,23 @@
       firebase.initializeApp(config);
 
       var database = firebase.database();
-      var clickCounter = 0;
+      var clickCounter = 100;
 
-      $("#incrementBtn").click(function() {
-          clickCounter++;
+      $("#changeBtn").click(function() {
+          if (clickCounter > 0) {
+              clickCounter--;
+              database.ref().set({
+                  clickCount: clickCounter
+              });
+          }
+      });
+
+      $("#resetBtn").click(function() {
+          clickCounter = 100;
           database.ref().set({
               clickCount: clickCounter
           });
-      });
+      })
 
       database.ref().on("value", function(snapshot) {
           console.log(snapshot.val());
