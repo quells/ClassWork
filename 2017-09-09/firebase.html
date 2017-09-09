@@ -54,9 +54,8 @@
 
     database.ref().on("value", function(snapshot) {
         console.log(snapshot.val());
-        var numClicks = snapshot.val().clickCount;
-        $("#clicksCounted").text(numClicks);
-        clickCounter = numClicks;
+        clickCounter = snapshot.val().clickCount;
+        $("#clicksCounted").text(clickCounter);
     }, function(error) {
         console.log("Oops: " + error)
     });
