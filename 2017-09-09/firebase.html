@@ -3,12 +3,35 @@
     <head>
         <meta charset="utf-8">
         <title>Firebase Demo</title>
+        <style media="screen">
+            th, td { padding: 4px; }
+        </style>
     </head>
     <body>
         <button type="button" id="incrementBtn">++</button>
         <button type="button" id="decrementBtn">--</button>
         <button type="button" id="resetBtn">Reset</button>
         <p id="clicksCounted"></p>
+
+        <hr>
+
+        <input type="text" id="usernameInput" placeholder="Username">
+        <input type="text" id="favNumberInput" placeholder="Favorite number?">
+        <button type="button" id="submitUserData">Submit</button>
+
+        <br>
+
+        <input type="text" id="deleteInput" placeholder="Username">
+        <button type="button" id="deleteBtn">Delete</button>
+
+        <br><br>
+
+        <table id="users" border="1">
+            <tr>
+                <th>Username</th>
+                <th>Favorite Number</th>
+            </tr>
+        </table>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
     <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
@@ -30,35 +53,78 @@
     $("#incrementBtn").click(function() {
         if (clickCounter < 100) {
             clickCounter++;
-            database.ref().set({
-                clickCount: clickCounter
-            });
+            database.ref("clickCount").set({ count: clickCounter });
         }
     });
 
     $("#decrementBtn").click(function() {
         if (clickCounter > 0) {
             clickCounter--;
-            database.ref().set({
-                clickCount: clickCounter
-            });
+            database.ref("clickCount").set({ count: clickCounter });
         }
     });
 
     $("#resetBtn").click(function() {
         clickCounter = 50;
-        database.ref().set({
-            clickCount: clickCounter
-        });
-    })
+        database.ref("clickCount").set({ count: clickCounter });
+    });
 
-    database.ref().on("value", function(snapshot) {
-        console.log(snapshot.val());
-        clickCounter = snapshot.val().clickCount;
+    database.ref("clickCount").on("value", function(snapshot) {
+        console.log(snapshot.val())
+        clickCounter = snapshot.val().count;
         $("#clicksCounted").text(clickCounter);
     }, function(error) {
         console.log("Oops: " + error)
     });
+
+    var numUsers = 0;
+    var users = new Array();
+    database.ref("users/numUsers").on("value", function(snapshot) {
+        numUsers = snapshot.val();
+    })
+
+    $("#submitUserData").click(function() {
+        var newUsername = $("#usernameInput").val();
+        var newFavNumber = $("#favNumberInput").val();
+        if (newUsername.length > 0 && newFavNumber.length > 0) {
+            database.ref("users/" + numUsers).set({
+                username: newUsername,
+                favoriteNumber: newFavNumber
+            });
+            database.ref("users/numUsers").set(numUsers + 1);
+        }
+    });
+
+    $("#deleteBtn").click(function() {
+        var userToDelete = $("#deleteInput").val();
+        if (userToDelete.length > 0) {
+            console.log("Deleting " + userToDelete);
+            for (var i = 0; i <= numUsers; i++) {
+                if (users[i] && userToDelete === users[i].username) {
+                    database.ref("users/"+i).remove().then(function() {
+                        console.log("Removed " + userToDelete);
+                    }).catch(function(error) {
+                        console.log(error);
+                    })
+                }
+            }
+        }
+    })
+
+    database.ref("users").on("value", function(snapshot) {
+        $(".userRow").remove();
+        users = [];
+        for (var i = 0; i < snapshot.val().numUsers; i++) {
+            var tr = $("<tr class='userRow'>");
+            var user = snapshot.val()[i];
+            if (user) {
+                users.push(user);
+                $("<td>").text(user.username).appendTo(tr);
+                $("<td>").text(user.favoriteNumber).appendTo(tr);
+                $("#users").append(tr);
+            }
+        }
+    })
 
     </script>
     </body>

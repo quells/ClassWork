@@ -2,6 +2,12 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## September 9, 2017
+
+- Intro to Firebase - online persistent database
+- [Click Counter](https://quells.github.io/ClassWork/2017-09-09/firebase.html)
+- [Bidding](https://quells.github.io/ClassWork/2017-09-09/codersbay.html)
+
 ## August 31, 2017
 
 - More APIs
