@@ -5,51 +5,61 @@
         <title>Firebase Demo</title>
     </head>
     <body>
-        <button type="button" id="changeBtn">Click Me!</button>
+        <button type="button" id="incrementBtn">++</button>
+        <button type="button" id="decrementBtn">--</button>
         <button type="button" id="resetBtn">Reset</button>
         <p id="clicksCounted"></p>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
     <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
     <script>
-      // Initialize Firebase
-      var config = {
+    // Initialize Firebase
+    var config = {
         apiKey: "AIzaSyAKIAoJnBg9-poZtnFNIxaTxb_u2DUJIxw",
         authDomain: "pedregaldecauca.firebaseapp.com",
         databaseURL: "https://pedregaldecauca.firebaseio.com",
         projectId: "pedregaldecauca",
         storageBucket: "pedregaldecauca.appspot.com",
         messagingSenderId: "559875883079"
-      };
-      firebase.initializeApp(config);
+    };
+    firebase.initializeApp(config);
 
-      var database = firebase.database();
-      var clickCounter = 100;
+    var database = firebase.database();
+    var clickCounter = 0;
 
-      $("#changeBtn").click(function() {
-          if (clickCounter > 0) {
-              clickCounter--;
-              database.ref().set({
-                  clickCount: clickCounter
-              });
-          }
-      });
+    $("#incrementBtn").click(function() {
+        if (clickCounter < 100) {
+            clickCounter++;
+            database.ref().set({
+                clickCount: clickCounter
+            });
+        }
+    });
 
-      $("#resetBtn").click(function() {
-          clickCounter = 100;
-          database.ref().set({
-              clickCount: clickCounter
-          });
-      })
+    $("#decrementBtn").click(function() {
+        if (clickCounter > 0) {
+            clickCounter--;
+            database.ref().set({
+                clickCount: clickCounter
+            });
+        }
+    });
 
-      database.ref().on("value", function(snapshot) {
-          console.log(snapshot.val());
-          var numClicks = snapshot.val().clickCount;
-          $("#clicksCounted").text(numClicks);
-          clickCounter = numClicks;
-      }, function(error) {
-          console.log("Oops: " + error)
-      });
+    $("#resetBtn").click(function() {
+        clickCounter = 50;
+        database.ref().set({
+            clickCount: clickCounter
+        });
+    })
+
+    database.ref().on("value", function(snapshot) {
+        console.log(snapshot.val());
+        var numClicks = snapshot.val().clickCount;
+        $("#clicksCounted").text(numClicks);
+        clickCounter = numClicks;
+    }, function(error) {
+        console.log("Oops: " + error)
+    });
 
     </script>
     </body>
