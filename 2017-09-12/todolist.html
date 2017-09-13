@@ -55,8 +55,9 @@
 
         var todo = $("#to-do").val();
         if (todo.length < 1) { return; }
-        displayItem(todo);
-        stored.items[stored.toDoCount] = todo;
+        var id = stored.toDoCount;
+        displayItem(todo, id);
+        stored.items[id] = todo;
         stored.toDoCount++;
 
         $("#to-do").val("");
