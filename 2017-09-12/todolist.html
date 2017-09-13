@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>To Do App!</title>
+
+  <style>
+    #todo-item {
+      font-weight: 700;
+      font-size: 2em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Title -->
+  <h1>My To Do's!</h1>
+
+  <!-- Input Form -->
+  <form>
+    <span id="todo-item">To Do Item: <input id="to-do" type="text" ><input id="add-to-do" value="Add Item" type="submit"></span>
+  </form>
+
+  <hr>
+
+  <!-- To-Do List -->
+  <div id="to-dos"></div>
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <script>
+    var stored = localStorage.getItem("todo-items") || {items: {}, toDoCount: 0};
+    if (typeof stored === "string") {
+        stored = JSON.parse(stored);
+        for (id in stored.items) {
+            var item = stored.items[id];
+            displayItem(item, id);
+        }
+    }
+
+    function displayItem(text, id) {
+        var p = $("<p class='todo-item'>").attr("id", "item-" + id).text(text);
+        $("<button class='checkbox'>").data("to-do", id).text("x").appendTo(p);
+        p.appendTo($("#to-dos"));
+    }
+
+    $("#add-to-do").on("click", function(event) {
+        // prevent form from submitting
+        event.preventDefault();
+
+        var todo = $("#to-do").val();
+        if (todo.length < 1) { return; }
+        displayItem(todo);
+        stored.items[stored.toDoCount] = todo;
+        stored.toDoCount++;
+
+        $("#to-do").val("");
+        localStorage.setItem("todo-items", JSON.stringify(stored));
+    });
+
+    $(document.body).on("click", ".checkbox", function() {
+        var toDoNumber = $(this).data("to-do");
+        $("#item-" + toDoNumber).remove();
+        delete stored.items[toDoNumber];
+        localStorage.setItem("todo-items", JSON.stringify(stored));
+    });
+  </script>
+
+</body>
+
+</html>

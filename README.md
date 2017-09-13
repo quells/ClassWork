@@ -2,6 +2,11 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## September 12, 2017
+
+- Intro to local persistence and localStorage
+- [To Do List]https://quells.github.io/ClassWork/2017-09-12/todolist.html (Only works in Chrome)
+
 ## September 9, 2017
 
 - Intro to Firebase - online persistent database
