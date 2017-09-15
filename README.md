@@ -2,6 +2,11 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## September 14, 2017
+
+- More Firebase
+- [Employee Database](https://quells.github.io/ClassWork/2017-09-14/)
+
 ## September 12, 2017
 
 - Intro to local persistence and localStorage
