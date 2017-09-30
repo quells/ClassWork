@@ -2,6 +2,10 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## September 30, 2017
+
+- Introduction to Node.js
+
 ## September 16-28, 2017
 
 - Group Project 1
