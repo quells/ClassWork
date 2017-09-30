@@ -2,6 +2,11 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## September 16-28, 2017
+
+- Group Project 1
+- [Education First](https://ucsd0725-educationfirst.github.io)
+
 ## September 14, 2017
 
 - More Firebase
