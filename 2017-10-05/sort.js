@@ -5,16 +5,17 @@ if (process.argv.length < 3) {
 var numbers = process.argv.slice(2).map(Number)
 
 function InsertionSort(arr, cmp) {
-    for (var i = 1; i < arr.length; i++) {
+    var copy = arr.slice(0)
+    for (var i = 1; i < copy.length; i++) {
         var j = i
-        while (j > 0 && cmp(arr[j-1], arr[j]) > 0) {
-            var tmp = arr[j]
-            arr[j] = arr[j-1]
-            arr[j-1] = tmp
+        while (j > 0 && cmp(copy[j-1], copy[j]) > 0) {
+            var tmp = copy[j]
+            copy[j] = copy[j-1]
+            copy[j-1] = tmp
             j--
         }
     }
-    return arr
+    return copy
 }
 
 InsertionSort(numbers, (a, b) => a - b).forEach(x => console.log(x))
