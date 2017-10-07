@@ -42,16 +42,17 @@ class Pokemon {
     }
 }
 
-var c = new Pokemon("Charmander", "Fire", "Female", 1, 5, 16)
-var s = new Pokemon("Squirtle", "Water", "Male", 1, 3, 14)
+var c = new Pokemon("Charmander", "Fire", "Male", 1, 5, 14)
+var s = new Pokemon("Squirtle", "Water", "Female", 1, 3, 16)
+var b = new Pokemon("Bulbasaur", "Leaf", "Female", 1, 4, 15)
 
 var first, second
 if (Math.random() < 0.5) {
-    first = c
-    second = s
-} else {
     first = s
-    second = c
+    second = b
+} else {
+    first = b
+    second = s
 }
 
 while (first.alive && second.alive) {
