@@ -1,4 +1,4 @@
-const Client = require("./mysql_client.js").Client
+const Client = require("./mysql_client.js")
 
 class Song {
     constructor(id, title, artist, genre) {
