@@ -38,31 +38,21 @@ class Playlist {
                 .then(() => this.id)
         }
         pull_p = pull_p
-            .then(playlist_id => client.Query(`SELECT song_id, playlist_index FROM playlist_contents WHERE playlist_id = ${playlist_id}`))
-            .then(rows => {
-                var p = Promise.resolve([])
-                rows.forEach(r => {
-                    p = p.then(arr => {
-                        return client.Query(`SELECT * FROM songs WHERE id = ${r.song_id}`)
-                        .then(rows => {
-                            if (rows.length < 1) {
-                                throw new Error(`Song not found`)
-                            }
-                            var row = rows[0]
-                            var song = new Song(row.id, row.title, row.artist, row.genre)
-                            song.playlist_index = r.playlist_index
-                            return song
-                        })
-                        .then(song => arr.push(song))
-                        .then(() => arr)
-                    })
-                })
-                return p
+            .then(playlist_id => {
+                return client.Query(`
+SELECT songs.id, songs.title, songs.artist, songs.genre from songs
+JOIN (
+    SELECT playlist_contents.song_id, playlist_contents.playlist_index
+    FROM playlists JOIN playlist_contents
+    WHERE playlist_contents.playlist_id = ${playlist_id} AND playlists.id = ${playlist_id}
+) playlist
+WHERE songs.id = playlist.song_id
+ORDER BY playlist.playlist_index
+                    `)
             })
-            .then(songs => {
-                songs.sort((a, b) => a.playlist_index - b.playlist_index)
-                return songs
-            })
+            .then(rows => rows.map(r => {
+                return new Song(r.id, r.title, r.artist, r.genre)
+            }))
             .then(songs => this.songs = songs)
             .catch(console.error)
             .then(() => client.Disconnect())
