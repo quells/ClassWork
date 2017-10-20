@@ -20,7 +20,7 @@ delete from top_songs where 1=1;
 
 select count(1) as count from top_songs;
 
-SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+-- group by... was throwing an error
 SET sql_mode = '';
 
 -- all songs by specific artist
@@ -42,3 +42,10 @@ select * from top_songs where `year_released` >= 1960 and `year_released` < 1970
 -- specific song
 select * from top_songs where `song` = 'All You Need is Love';
 select * from top_songs where `id` = 5;
+
+-- by total popularity (sales?)
+select id, artist,
+sum(raw_popularity) as total_popularity
+from top_songs
+group by artist
+order by total_popularity desc;
