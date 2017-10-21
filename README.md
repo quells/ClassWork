@@ -2,6 +2,10 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## October 21, 2017
+
+- Introduction to Node Servers
+
 ## September 30, 2017
 
 - Introduction to Node.js
