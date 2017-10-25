@@ -1,0 +1,15 @@
+{
+  "name": "star-wars",
+  "version": "1.0.0",
+  "description": "Hello Express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kai Wells",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2"
+  }
+}

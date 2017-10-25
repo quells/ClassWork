@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <title>Star Wars</title>
+    </head>
+    <body>
+        <header class="container mt-3">
+            <div class="jumbotron">
+                <h1>Star Wars Characters</h1>
+            </div>
+        </header>
+
+        <main class="container">
+            <div id="characters"></div>
+            <div class="card">
+                <div class="card-body">
+                    <h3>Add a Character</h3>
+                    <form id="newCharacter">
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="role" placeholder="Role">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" name="age" placeholder="Age">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" name="power" placeholder="Power Level">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="submitNewCharacter">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+    <script src="request.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        document.getElementById("submitNewCharacter").addEventListener("click", function(e) {
+            e.preventDefault()
+            var form = document.getElementById("newCharacter")
+            var name = form.elements.name.value
+            var role = form.elements.role.value
+            var age = Number(form.elements.age.value)
+            var power = Number(form.elements.power.value)
+            if (name.length < 1 || role.length < 1 || age < 1 || power < 1) {
+                return
+            }
+            var req = new PostRequest("/api/character/new")
+            req.send({
+                name: name,
+                role: role,
+                age: age,
+                forcePoints: power
+            })
+            .then(function(msg) {
+                if (msg.error) {
+                    alert(msg.errorMsg)
+                } else {
+                    displayAllCharacters()
+                }
+            })
+        })
+
+        function displayAllCharacters() {
+            var characters = document.getElementById("characters")
+            var req = new GetRequest("/api/characters/role/%20")
+            req.send()
+            .then(function(data) {
+                if (data.error) {
+                    alert(data.errorMsg)
+                } else {
+                    characters.innerHTML = ""
+                    data.characters.forEach(function(c, i) {
+                        var box = document.createElement("div")
+                        box.className = "character-box"
+                        var name = document.createElement("h3")
+                        name.innerHTML = `${c.name} (Age ${c.age})<br>`
+                        var role = document.createElement("small")
+                        role.innerHTML = `${c.role}, POW ${c.forcePoints}`
+                        name.appendChild(role)
+                        box.appendChild(name)
+                        characters.appendChild(box)
+                    })
+                }
+            })
+        }
+
+        displayAllCharacters()
+    </script>
+    </body>
+</html>
