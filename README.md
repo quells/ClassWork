@@ -2,6 +2,11 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## October 24, 2017
+
+- Introduction to Express.js
+- The first "full stack" app
+
 ## October 21, 2017
 
 - Introduction to Node Servers
