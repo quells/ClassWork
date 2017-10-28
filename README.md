@@ -2,6 +2,11 @@
 
 UCSD Extension Full Stack Web Development 0725
 
+## October 28, 2017
+
+- More Express.js
+- Introduction to Handlebars.js
+
 ## October 24, 2017
 
 - Introduction to Express.js
