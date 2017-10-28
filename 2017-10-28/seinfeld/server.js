@@ -45,6 +45,15 @@ function renderResults(results) {
 
 app.get("/cast", (req, res) => {
     var c = new Client("seinfeld_db")
+    /*
+    reverse(
+        substring_index(
+            reverse(actor_name), -- reverse name
+            ' ',                 -- split on space
+            1                    -- select only first word (last name)
+        )
+    )                            -- reverse last name again for alphabetical ordering
+    */
     c.Connect()
     .then(() => c.Query("SELECT * FROM actors ORDER BY reverse(substring_index(reverse(actor_name), ' ', 1))"))
     .then(results => res.end(renderResults(results)))
