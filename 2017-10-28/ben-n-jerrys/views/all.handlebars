@@ -1,0 +1,10 @@
+<main class="container">
+    <h2 class="text-center">Our Flavors</h2>
+    {{#each icecreams}}
+        <div class="ice-cream">
+            <h4>{{name}} (${{price}})</h4>
+            <p>Awesomeness: {{awesomeness}}</p>
+            <p><a href="/flavors/{{shortenName name}}">More Info</a></p>
+        </div>
+    {{/each}}
+</main>
