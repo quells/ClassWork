@@ -1,0 +1,14 @@
+#quotes .quote,
+#addQuote {
+    background: #FEF48B;
+    padding: 1em;
+    margin: 0 0 1em 0;
+}
+
+#addQuote {
+    background: #9FF2FF;
+}
+
+form .form-group button {
+    margin-right: 1em;
+}
