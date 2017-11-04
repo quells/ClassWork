@@ -11,7 +11,7 @@ $(function() {
         url: "/api/chirps/all",
         success: function(response) {
             if (response.error) {
-                console.trace()
+                console.trace(response)
                 alert("Something went wrong")
                 return
             }
@@ -26,8 +26,8 @@ $(function() {
 function renderChirp(c) {
     var div = $(`<div class="chirp" id="chirp-${c.id}">`)
     $("<p class='chirp-text'>").text(c.text).appendTo(div)
-    $("<p>").append($("<span>").text(c.user_real).attr("title", c.user_handle)).appendTo(div)
-    $("<p>").text(moment(c.created_at).fromNow()).appendTo(div)
+    $("<p>").append($("<span>").text(c.chirper.real_name).attr("title", c.chirper.username)).appendTo(div)
+    $("<p>").text(moment(c.createdAt).fromNow()).appendTo(div)
     return div
 }
 
@@ -36,7 +36,6 @@ $("#submitChirp").click(function() {
     var username = $("#username").val()
     var isValid = /^[a-zA-Z0-9_]+$/.test(username)
     if (!isValid) {
-        console.trace()
         alert("invalid username")
         return
     }
@@ -79,7 +78,7 @@ function sendChirp(user_id, text) {
         },
         success: function(response) {
             if (response.error) {
-                console.trace()
+                console.trace(response)
                 alert("something went wrong")
                 return
             }
@@ -89,7 +88,7 @@ function sendChirp(user_id, text) {
                 url: "/api/chirps/" + chirp_id,
                 success: function(response) {
                     if (response.error) {
-                        console.trace()
+                        console.trace(response)
                         alert("something went wrong")
                         return
                     }
