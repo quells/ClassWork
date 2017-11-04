@@ -26,7 +26,7 @@ $(function() {
 function renderChirp(c) {
     var div = $(`<div class="chirp" id="chirp-${c.id}">`)
     $("<p class='chirp-text'>").text(c.text).appendTo(div)
-    $("<p>").text(c.user_real).attr("alt", c.user_handle).appendTo(div)
+    $("<p>").append($("<span>").text(c.user_real).attr("title", c.user_handle)).appendTo(div)
     $("<p>").text(moment(c.created_at).fromNow()).appendTo(div)
     return div
 }
@@ -55,11 +55,11 @@ $("#submitChirp").click(function() {
                             real_name: $("#realname").val()
                         },
                         success: function(response) {
-                            sendChirp(response.id, chirpText)
+                            sendChirp(response.user_id, chirpText)
                         }
                     })
                 } else {
-                    console.trace()
+                    console.trace(response)
                     alert("something went wrong")
                 }
             } else {
