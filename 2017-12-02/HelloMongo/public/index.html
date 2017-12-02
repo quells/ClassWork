@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style media="screen">
+      th, td {
+        padding: 0.5rem 1rem;
+      }
+    </style>
+    <title>Zoo</title>
+  </head>
+  <body>
+    <h1>Welcome to the Zoo</h1>
+    <table id="animals" border="1">
+      <thead>
+        <tr>
+          <th><a href="#" id="sortByName">Name</a></th>
+          <th>Species</th>
+          <th><a href="#" id="sortByWeight">Weight</a></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      drawAnimals("/all")
+
+      var tbody = $("#animals > tbody")
+      $("#sortByName").click(toggleDirection(drawAnimals, "/sorted/name"))
+      $("#sortByWeight").click(toggleDirection(drawAnimals, "/sorted/weight"))
+
+      function toggleDirection(fn, base) {
+        return function() {
+          if ($(this).data("direction") === "descending") {
+            fn(base)
+            $(this).data("direction", "ascending")
+          } else {
+            fn(base + "/descending")
+            $(this).data("direction", "descending")
+          }
+        }
+      }
+
+      function clearAnimals() {
+        tbody.empty()
+      }
+
+      function addAnimal(name, species, weight) {
+        var tr = $("<tr>")
+        $("<td>").text(name).appendTo(tr)
+        $("<td>").text(species).appendTo(tr)
+        $("<td>").text(weight).appendTo(tr)
+        tr.appendTo(tbody)
+      }
+
+      function drawAnimalRows(animals) {
+        clearAnimals()
+        animals.forEach(function(a) {
+          addAnimal(a.name, a.species, a.weight)
+        })
+      }
+
+      function drawAnimals(url) {
+        $.get(url)
+        .done(function(response) {
+          if (response.error) return console.log(response)
+          drawAnimalRows(response.animals)
+        })
+        .fail(function(err) {
+          console.log(err)
+        })
+      }
+    })
+  </script>
+  </body>
+</html>

@@ -11,9 +11,7 @@ app.use(bp.json())
 let db = mongojs("zoo", ["zoo"])
 db.on("error", console.error.bind(console, "mongo error:"))
 
-app.get("/", (req, res) => {
-  res.send("Hello, world")
-})
+app.use(express.static("public"))
 
 app.get("/all", (req, res) => {
   db.zoo.find((err, animals) => {
